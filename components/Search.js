@@ -12,8 +12,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import { useAppSelector, useAppDispatch } from "../hooks";
-import { selectSearch, add_search } from "../features/search/searchSlice";
 
 
 import * as BooksAPI from "../utils/api";

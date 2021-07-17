@@ -3,10 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 
 import { Ionicons } from "@expo/vector-icons";
-
-
 import { selectBooks } from "../features/books/booksSlice";
-
 import { handleInitialData } from "../features/shared/shared";
 
 
