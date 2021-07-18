@@ -1,7 +1,7 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 import {getBook} from "../utils/api"
-import { getInitial } from "../utils/api";
+import { getData, storeData } from "../utils/api";
 
 
 export const BookContext = createContext();
@@ -11,18 +11,10 @@ const BookContextProvider = (props) => {
 	const [search, setSearch] = useState([]);
 
   const handleInitialData = async () => {
-    
-      try {
-        const booksData = await getInitial().then((book) => {
-            setBooks([...books, {...book, shelf: "currentlyReading"}]);
-            //setBooks(book)
-        });
-  
-        if (booksData === null) return;
-      } catch (e) {
-        console.error("Failed to load books!");
-      }
-    
+				//const booksData = localStorage.getItem('books');
+				const booksData =  await getData()
+				console.log(booksData);
+				return booksData
   };
 
   const update_shelf = async (id, shelf) => {
@@ -36,7 +28,7 @@ const BookContextProvider = (props) => {
 							...updatedBook
 						}
 					}
-					console.log(newState);
+					
 					setBooks(newState)
 
         });
@@ -47,11 +39,13 @@ const BookContextProvider = (props) => {
     };
 
 	
-  
-
   const update_search = (query) => {
 		setSearch(query)
 	}
+
+	useEffect(() => {
+    storeData(books)
+  }, [books]);
   
   return (
     <BookContext.Provider value={{ books, handleInitialData, update_shelf, update_search, search}}>

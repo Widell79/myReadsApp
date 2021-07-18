@@ -24,7 +24,7 @@ const BookShelf = ({ navigation }) => {
   
 
   useEffect(() => {
-    //handleInitialData()
+    handleInitialData()
   }, []);
 
   const bookShelfs = ["Currently Reading", "Want to Read", "Read"];
