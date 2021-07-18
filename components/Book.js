@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+import { BookContext } from '../contexts/BookContext';
 
 
 const Book = ({ route, navigation }) => {
@@ -24,11 +25,13 @@ const Book = ({ route, navigation }) => {
     { label: "None", value: "none" },
   ]);
 
-  const dispatch = useAppDispatch();
+  //const dispatch = useAppDispatch();
+  const { update_shelf } = useContext(BookContext);
+
 
   const updateBookShelf = (id, shelf) => {
     const bookId = id.id;
-    dispatch(updateShelf(bookId, shelf));
+    update_shelf(bookId, shelf);
     navigation.push("BookShelf");
   };
 

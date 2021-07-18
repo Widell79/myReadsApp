@@ -21,7 +21,7 @@ export const convertShelf = (shelf) => {
 
 const BookShelf = ({ navigation }) => {
   const { books, handleInitialData } = useContext(BookContext);
-  console.log(books);
+  
 
   useEffect(() => {
     handleInitialData()

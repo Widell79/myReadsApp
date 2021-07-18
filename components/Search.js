@@ -22,7 +22,7 @@ import { BookContext } from '../contexts/BookContext';
 
 const Search = ({ route, navigation }) => {
   const { currentBooks } = route.params;
-  const { dispatch } = useContext(BookContext);
+  const { search, update_search } = useContext(BookContext);
 
 
   
@@ -30,9 +30,7 @@ const Search = ({ route, navigation }) => {
   const searchBook = (query) => {
     BooksAPI.search(query).then((book) => {
       if (query.length !== 0) {
-        
-        dispatch({ type: 'ADD_SEARCH', book: book});
-
+        update_search(book)
       }
     });
   };
@@ -43,7 +41,7 @@ const Search = ({ route, navigation }) => {
     searchBook(value);
   };
 
-  //const searchedBooks = useAppSelector(selectSearch);
+  const searchedBooks = search;
 
   function mapBooksToList(books) {
     return {

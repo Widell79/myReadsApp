@@ -8,6 +8,7 @@ export const BookContext = createContext();
 
 const BookContextProvider = (props) => {
   const [books, setBooks] = useState([]);
+	const [search, setSearch] = useState([]);
 
   const handleInitialData = async () => {
     
@@ -24,14 +25,31 @@ const BookContextProvider = (props) => {
     
   };
 
-  console.log(books);
+  const update_shelf = async (id, shelf) => {
+    try {
+        await getBook(id).then((book) => {
+					const updatedBook = {...book, shelf}
+
+          setBooks([...books, {...updatedBook}]);
+
+        });
+      } catch (err) {
+        console.warn("Error in update_shelf: ", err);
+        alert("There was an error updating the shelf. Please try again.");
+      }
+    };
+  
+
+  const update_search = (query) => {
+		setSearch(query)
+	}
   
   return (
-    <BookContext.Provider value={{ books, handleInitialData}}>
+    <BookContext.Provider value={{ books, handleInitialData, update_shelf, update_search, search}}>
       {props.children}
     </BookContext.Provider>
   );
-}
+	}
 
 
 
