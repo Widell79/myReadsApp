@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 
 import {
   View,
@@ -15,18 +15,24 @@ import {
 
 
 import * as BooksAPI from "../utils/api";
+import { BookContext } from '../contexts/BookContext';
+
 
 
 
 const Search = ({ route, navigation }) => {
   const { currentBooks } = route.params;
+  const { dispatch } = useContext(BookContext);
 
-  const dispatch = useAppDispatch();
+
+  
 
   const searchBook = (query) => {
     BooksAPI.search(query).then((book) => {
       if (query.length !== 0) {
-        dispatch(add_search(book));
+        
+        dispatch({ type: 'ADD_SEARCH', book: book});
+
       }
     });
   };
@@ -37,7 +43,7 @@ const Search = ({ route, navigation }) => {
     searchBook(value);
   };
 
-  const searchedBooks = useAppSelector(selectSearch);
+  //const searchedBooks = useAppSelector(selectSearch);
 
   function mapBooksToList(books) {
     return {

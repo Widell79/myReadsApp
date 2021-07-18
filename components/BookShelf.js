@@ -20,11 +20,11 @@ export const convertShelf = (shelf) => {
 
 
 const BookShelf = ({ navigation }) => {
-  const { books } = useContext(BookContext);
-
+  const { books, handleInitialData } = useContext(BookContext);
+  console.log(books);
 
   useEffect(() => {
-    
+    handleInitialData()
   }, []);
 
   const bookShelfs = ["Currently Reading", "Want to Read", "Read"];
