@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 
 import { Ionicons } from "@expo/vector-icons";
-import { selectBooks } from "../features/books/booksSlice";
-import { handleInitialData } from "../features/shared/shared";
+import { BookContext } from '../contexts/BookContext';
+
 
 
 export const convertShelf = (shelf) => {
@@ -20,15 +20,15 @@ export const convertShelf = (shelf) => {
 
 
 const BookShelf = ({ navigation }) => {
-  const dispatch = useAppDispatch();
+  const { books } = useContext(BookContext);
+
 
   useEffect(() => {
-    dispatch(handleInitialData());
+    
   }, []);
 
   const bookShelfs = ["Currently Reading", "Want to Read", "Read"];
 
-  const books = useAppSelector(selectBooks);
 
   function mapBooksToList(books) {
     return {

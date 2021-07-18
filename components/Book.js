@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 
-import { useAppDispatch } from "../hooks";
-import { updateShelf } from "../features/books/booksSlice";
-
 
 const Book = ({ route, navigation }) => {
   const {
