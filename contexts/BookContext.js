@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import { LogBox } from 'react-native';
+
 import {getBook} from "../utils/api"
 import { getInitial } from "../utils/api";
 
@@ -28,9 +28,16 @@ const BookContextProvider = (props) => {
   const update_shelf = async (id, shelf) => {
     try {
         await getBook(id).then((book) => {
+					
 					const updatedBook = {...book, shelf}
-
-          setBooks([...books, {...updatedBook}]);
+					const newState = {
+						...books,
+						[id]: {
+							...updatedBook
+						}
+					}
+					console.log(newState);
+					setBooks(newState)
 
         });
       } catch (err) {
@@ -38,6 +45,8 @@ const BookContextProvider = (props) => {
         alert("There was an error updating the shelf. Please try again.");
       }
     };
+
+	
   
 
   const update_search = (query) => {
