@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { BookContext } from '../contexts/BookContext';
-
+import { BookContext } from "../contexts/BookContext";
 
 const Book = ({ route, navigation }) => {
   const {
@@ -28,11 +27,10 @@ const Book = ({ route, navigation }) => {
   //const dispatch = useAppDispatch();
   const { update_shelf } = useContext(BookContext);
 
-
   const updateBookShelf = (id, shelf) => {
     const bookId = id.id;
     update_shelf(bookId, shelf);
-    navigation.push("BookShelf");
+    navigation.navigate("BookShelf");
   };
 
   return (
@@ -63,7 +61,6 @@ const Book = ({ route, navigation }) => {
                 marginTop: 5,
               }}
             />
-            
           </View>
           <Text style={styles.bookTitle}>{bookTitle}</Text>
           <Text style={styles.bookAuthors}>{bookAuthor}</Text>
