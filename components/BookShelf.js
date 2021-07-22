@@ -1,11 +1,15 @@
 import React, { useEffect, useContext } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  SectionList,
+} from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-import { BookContext } from '../contexts/BookContext';
-
-
+import { BookContext } from "../contexts/BookContext";
 
 export const convertShelf = (shelf) => {
   switch (shelf) {
@@ -18,17 +22,12 @@ export const convertShelf = (shelf) => {
   }
 };
 
-
 const BookShelf = ({ navigation }) => {
   const { books, handleInitialData } = useContext(BookContext);
-  
 
   useEffect(() => {
-    handleInitialData()
+    handleInitialData();
   }, []);
-
-  const bookShelfs = ["Currently Reading", "Want to Read", "Read"];
-
 
   function mapBooksToList(books) {
     return {
@@ -42,65 +41,7 @@ const BookShelf = ({ navigation }) => {
   });
 
   return (
-    <View style={styles.listBooksContent}>
-      {bookShelfs.map((shelf) => (
-        <View key={shelf} style={styles.bookshelf}>
-          <Text style={styles.bookshelfTitle}>{shelf}</Text>
-          <View style={styles.bookshelfBooks}>
-            <View style={styles.booksGrid}>
-              {bookListInfo
-                .filter(function (book) {
-                  return book.shelf === convertShelf(shelf);
-                })
-                .map((book) => {
-                  const background = `${
-                    book.volumeInfo.imageLinks
-                      ? book.volumeInfo.imageLinks.thumbnail
-                      : "./bg.png"
-                  }`;
-                  return (
-                    <View key={book.id}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          navigation.navigate("Book", {
-                            bookTitle: book.volumeInfo.title,
-                            bookAuthor: book.volumeInfo.authors,
-                            image: background,
-                            shelf: book.shelf,
-                            language: book.volumeInfo.language,
-                            pages: book.volumeInfo.pageCount,
-                            publishedDate: book.volumeInfo.publishedDate,
-                            id: book.id,
-                          });
-                        }}
-                      >
-                        <View style={styles.book}>
-                          <View style={styles.bookTop}>
-                            <Image
-                              source={{ uri: background }}
-                              style={{
-                                width: 128,
-                                height: 188,
-                                backgroundColor: "#eee",
-                                marginTop: 10,
-                              }}
-                            />
-                          </View>
-                          <Text style={styles.bookTitle}>
-                            {book.volumeInfo.title}
-                          </Text>
-                          <Text style={styles.bookAuthors}>
-                            {book.volumeInfo.authors}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  );
-                })}
-            </View>
-          </View>
-        </View>
-      ))}
+    <View style={styles.container}>
       <View style={styles.openSearch}>
         <TouchableOpacity
           onPress={() =>
@@ -112,6 +53,83 @@ const BookShelf = ({ navigation }) => {
           <Ionicons name="add-circle" size={48} color="#5aa897" />
         </TouchableOpacity>
       </View>
+      <SectionList
+        sections={[
+          {
+            title: "Currently Reading",
+            data: bookListInfo.filter(function (book) {
+              return book.shelf === convertShelf("Currently Reading");
+            }),
+          },
+          {
+            title: "Want to Read",
+            data: bookListInfo.filter(function (book) {
+              return book.shelf === convertShelf("Want to Read");
+            }),
+          },
+          {
+            title: "Read",
+            data: bookListInfo.filter(function (book) {
+              return book.shelf === convertShelf("Read");
+            }),
+          },
+        ]}
+        renderItem={({ item }) => {
+          const background = `${
+            item.volumeInfo.imageLinks
+              ? item.volumeInfo.imageLinks.thumbnail
+              : "./bg.png"
+          }`;
+
+          return (
+            <View>
+              <View style={styles.booksGrid}>
+                <View style={styles.book}>
+                  <View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate("Book", {
+                          bookTitle: item.volumeInfo.title,
+                          bookAuthor: item.volumeInfo.authors,
+                          image: background,
+                          shelf: item.shelf,
+                          language: item.volumeInfo.language,
+                          pages: item.volumeInfo.pageCount,
+                          publishedDate: item.volumeInfo.publishedDate,
+                          id: item.id,
+                        });
+                      }}
+                    >
+                      <Image
+                        source={{ uri: background }}
+                        style={{
+                          width: 128,
+                          height: 188,
+                          backgroundColor: "#eee",
+                          marginTop: 10,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={styles.bookTitle}>{item.volumeInfo.title}</Text>
+                  <Text style={styles.bookAuthors}>
+                    {item.volumeInfo.authors}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          );
+        }}
+        renderSectionHeader={({ section }) => (
+          <View style={styles.bookshelf}>
+            <Text style={styles.bookshelfTitle}>{section.title}</Text>
+            <View>
+              <View style={styles.booksGrid}></View>
+            </View>
+          </View>
+        )}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 };
@@ -119,17 +137,14 @@ const BookShelf = ({ navigation }) => {
 export default BookShelf;
 
 const styles = StyleSheet.create({
-  bookshelf: {
-    paddingTop: 20,
-    paddingRight: 20,
-  },
-  bookshelfBooks: {
-    alignItems: "center",
-  },
-  listBooksContent: {
+  container: {
     backgroundColor: "#faf3e0",
     paddingLeft: 40,
     flex: 1,
+  },
+  bookshelf: {
+    paddingTop: 20,
+    paddingRight: 20,
   },
   bookshelfTitle: {
     fontSize: 24,
@@ -139,9 +154,7 @@ const styles = StyleSheet.create({
   booksGrid: {
     padding: 0,
     margin: 0,
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
+    alignItems: "center",
   },
   bookTitle: {
     fontSize: 16,
